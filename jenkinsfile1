@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    triggers {
+        pollSCM('* * * * *')
+    }
+    stages {
+        stage('vcs') {
+            steps {
+                git branch: 'main', url: 'https://github.com/anji1649github/saleor.git'
+            }
+        }
+        stage('docker image build') {
+            steps {
+                sh 'docker image build -t anji1649/saleor:DEV .'
+            }
+        }
+        stage('push image to registry') {
+            steps {
+                sh 'docker image push anji1649/saleor:DEV'
+            }
+        }
+    }
+}
